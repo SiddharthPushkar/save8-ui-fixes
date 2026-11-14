@@ -49,7 +49,16 @@ form.add.open{display:grid}
 form.add .actions{display:flex;align-items:flex-end;gap:6px}
 
 .list{display:flex;flex-direction:column;gap:10px}
-.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:flex-start;gap:14px;transition:box-shadow .15s}
+.task > .check{margin-top:1px}
+.changes{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.changes-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.changes ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.changes li{position:relative;padding-left:14px;font-size:13.5px;line-height:1.45;color:#3d463f}
+.changes li::before{content:"";position:absolute;left:2px;top:8px;width:5px;height:5px;border-radius:50%;background:var(--green)}
+.field.wide{grid-column:1 / -1}
+.field textarea{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;outline:none;font:inherit;min-height:84px;resize:vertical}
+.field textarea:focus{border-color:var(--green)}
 .task:hover{box-shadow:0 4px 18px rgba(20,40,25,.06)}
 .check{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);background:#fff;cursor:pointer;flex:none;display:grid;place-items:center}
 .check svg{width:12px;height:12px;opacity:0}
@@ -119,6 +128,10 @@ form.add .actions{display:flex;align-items:flex-end;gap:6px}
     <div class="actions">
       <button type="button" class="btn btn-ghost" id="cancel">Cancel</button>
       <button class="btn btn-primary">Add</button>
+    </div>
+    <div class="field wide">
+      <label for="fChanges">What changed <span style="font-weight:400">(one per line, optional)</span></label>
+      <textarea id="fChanges" placeholder="e.g. Location pill now matches the Login height"></textarea>
     </div>
   </form>
 
@@ -192,6 +205,11 @@ function render() {
           <span class="chip">${esc(t.page)}</span>
           <span class="status">${LABEL[t.status]}</span>
         </div>
+        ${(t.changes && t.changes.length) ? `
+        <div class="changes">
+          <div class="changes-label">What changed</div>
+          <ul>${t.changes.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
+        </div>` : ""}
       </div>
       <a class="open" href="${esc(BASE + t.path)}" target="_blank" rel="noopener">Open page →</a>
       <button class="del" data-act="del" title="Delete">
@@ -238,6 +256,7 @@ $("#addForm").addEventListener("submit", (e) => {
     path: p.path,
     status: "todo",
     created: new Date().toISOString().slice(0, 10),
+    changes: $("#fChanges").value.split("\n").map((s) => s.trim()).filter(Boolean),
   });
   e.target.reset();
   e.target.classList.remove("open");

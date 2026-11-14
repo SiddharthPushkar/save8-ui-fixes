@@ -5,7 +5,13 @@
     "page": "Home",
     "path": "/",
     "status": "done",
-    "created": "2026-11-14"
+    "created": "2026-11-14",
+    "changes": [
+      "Desktop: location is a cream pill — \"Showing prices for / Set location\" with a down-chevron, 38px tall like the buttons next to it",
+      "Icon: Save8 colour location pin (pin only, no map)",
+      "Phone: white round button with the colour pin",
+      "Login button replaced by a round profile avatar (Save8 illustrated style); it still opens login"
+    ]
   },
   {
     "id": "t2",
@@ -13,6 +19,35 @@
     "page": "Home",
     "path": "/",
     "status": "doing",
+    "created": "2026-11-14",
+    "changes": [
+      "Desktop: the scrolled bar matches the header (66px, 24px padding, same menu and logo); location and profile sit on the right",
+      "Desktop: the green header softens to cream, the tabs slide down out of view and the bar's search fades in; location and profile stay perfectly still",
+      "Phone: the header switches as soon as the hero search reaches the header edge",
+      "Phone: the hero search flies up and shrinks into the header's small search, and flies back when you scroll up",
+      "Both: on the way back the edge moves down first, then the tabs slide up into place (solid, no fade)",
+      "Page content no longer jumps when the header changes height"
+    ]
+  },
+  {
+    "id": "t3",
+    "title": "Smooth hero gradient, logo opens task list",
+    "page": "Home",
+    "path": "/",
+    "status": "done",
+    "created": "2026-11-14",
+    "changes": [
+      "Hero background fades from green to cream on an eased curve, so there's no hard line at the bottom",
+      "Same tones kept behind the hero text, so the white text stays readable",
+      "The Save8 logo opens this task list"
+    ]
+  },
+  {
+    "id": "t1794647848336",
+    "title": "ffdfdsdf",
+    "page": "Gift Card",
+    "path": "/gift-cards",
+    "status": "todo",
     "created": "2026-11-14"
   }
 ]
