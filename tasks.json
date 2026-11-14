@@ -18,7 +18,7 @@
     "title": "Scrolled top bar: match header, morph search",
     "page": "Home",
     "path": "/",
-    "status": "doing",
+    "status": "done",
     "created": "2026-11-14",
     "changes": [
       "Desktop: the scrolled bar matches the header (66px, 24px padding, same menu and logo); location and profile sit on the right",
@@ -38,8 +38,7 @@
     "created": "2026-11-14",
     "changes": [
       "Hero background fades from green to cream on an eased curve, so there's no hard line at the bottom",
-      "Same tones kept behind the hero text, so the white text stays readable",
-      "The Save8 logo opens this task list"
+      "Same tones kept behind the hero text, so the white text stays readable"
     ]
   },
   {
