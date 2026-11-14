@@ -42,6 +42,21 @@
     ]
   },
   {
+    "id": "t4",
+    "title": "Balanced footer",
+    "page": "Home",
+    "path": "/",
+    "status": "done",
+    "created": "2026-11-14",
+    "changes": [
+      "Same rounded navy card and headline; links split into Legal and Help groups",
+      "Desktop: four columns (brand, Legal, Help, Get the app) with equal space between them",
+      "App buttons get a \"Get the app\" label; App Store comes before Google Play",
+      "Phone: logo, headline and buttons first, then the two link groups side by side",
+      "Text and spacing follow the design-system type and spacing steps"
+    ]
+  },
+  {
     "id": "t1794647848336",
     "title": "ffdfdsdf",
     "page": "Gift Card",

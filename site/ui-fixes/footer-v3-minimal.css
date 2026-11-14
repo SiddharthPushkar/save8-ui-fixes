@@ -1,0 +1,100 @@
+/* Task: footer — v3 "simple, minimal" (user: "make it simple minimal").
+   Earlier versions kept: footer-v1-card.css (navy card), footer-v2-band.css (big band).
+     - flat full-width Save8 navy, no glows, no wordmark, no rounded corners
+     - top row: logo + one-line description left; small app badges side by side right
+     - thin divider, then links left and company right
+     - the "Never Overpay Again." headline is hidden here (the hero already says it)
+   Tuned to design-system tokens: Body/Default 14/22 text, Overline 12/16 +4% company line,
+   spacing on the 4/8/12/16/20/24/32 scale. Navy #000A7F kept from the live footer.
+   Same content as the site; CSS only. */
+
+footer[aria-label="Save8 footer"] {
+  --s8f-blue: #000A7F;
+  --s8f-line: rgba(255, 255, 255, .12);
+  --s8f-text: rgba(255, 255, 255, .7);
+  --s8f-dim: rgba(255, 255, 255, .45);
+  margin-top: 24px;
+  border-top: 0 !important;
+  background: var(--s8f-blue) !important;
+}
+/* the old card is just layout now */
+footer[aria-label="Save8 footer"] > div > div {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+footer[aria-label="Save8 footer"] h2 { display: none !important; }
+
+/* links: no dots, quiet until hover */
+footer[aria-label="Save8 footer"] nav span[class*="text-white/40"] { display: none !important; }
+footer[aria-label="Save8 footer"] nav a {
+  color: var(--s8f-text);
+  font-size: 14px;
+  transition: color .15s ease;
+}
+footer[aria-label="Save8 footer"] nav a:hover { color: #fff; }
+
+/* ---------- desktop ---------- */
+@media (min-width: 1024px) {
+  footer[aria-label="Save8 footer"] { padding: 0 32px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 48px;
+    row-gap: 0;
+    align-items: center;
+    padding: 32px 0 24px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a { grid-column: 1; grid-row: 1; margin: 0 0 8px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a img { height: 24px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:first-of-type {
+    grid-column: 1; grid-row: 2;
+    font-size: 14px !important; line-height: 22px !important; color: var(--s8f-text) !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child {
+    grid-column: 2; grid-row: 1 / 3;
+    width: 268px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child > div { gap: 12px !important; justify-content: flex-end !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div::after {
+    content: "";
+    grid-column: 1 / -1; grid-row: 3;
+    height: 1px; background: var(--s8f-line);
+    margin: 24px 0 20px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > nav {
+    grid-column: 1; grid-row: 4; margin: 0 !important; column-gap: 24px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:last-of-type {
+    grid-column: 2; grid-row: 4; justify-self: end; margin: 0 !important;
+    font-size: 12px !important; line-height: 16px !important; font-weight: 500; letter-spacing: .04em; color: var(--s8f-dim) !important;
+  }
+}
+
+/* ---------- phone / tablet ---------- */
+@media (max-width: 1023.98px) {
+  footer[aria-label="Save8 footer"] { padding: 0 !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div {
+    gap: 0 !important;
+    padding: 32px 16px 24px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child,
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > a { order: 1; margin-bottom: 8px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:first-of-type {
+    order: 2; color: var(--s8f-text) !important; font-size: 14px !important; line-height: 22px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:last-child {
+    order: 3; justify-content: flex-start !important; gap: 12px !important; margin-top: 20px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:last-child > a { max-width: 132px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div::after {
+    content: ""; order: 4; height: 1px; background: var(--s8f-line); margin: 24px 0 16px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] nav { order: 5; column-gap: 16px !important; row-gap: 8px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:last-of-type {
+    order: 6; margin-top: 12px; font-size: 12px !important; line-height: 16px !important; font-weight: 500; letter-spacing: .04em; color: var(--s8f-dim) !important;
+  }
+}

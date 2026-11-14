@@ -1,0 +1,125 @@
+/* Task: footer — v4 "grouped" (user: "make it look better, reference Mobbin").
+   References: Shop, Uxcel, MasterClass footers on Mobbin.
+     - brand column: logo, one-line description, app badges
+     - links in two small labelled groups (Legal / Help) on the right
+     - divider, then a quiet bottom bar with the company name
+   Earlier versions kept: footer-v1-card.css, footer-v2-band.css, footer-v3-minimal.css.
+   Design-system tokens: Body/Default 14/22 text and links, Overline 12/16 +4% labels,
+   spacing on the 4/8/12/16/20/24/32 scale. Navy #000A7F kept from the live footer.
+   Same content as the site; CSS only. */
+
+footer[aria-label="Save8 footer"] {
+  --s8f-blue: #000A7F;
+  --s8f-line: rgba(255, 255, 255, .12);
+  --s8f-text: rgba(255, 255, 255, .72);
+  --s8f-dim: rgba(255, 255, 255, .45);
+  margin-top: 24px;
+  border-top: 0 !important;
+  background: var(--s8f-blue) !important;
+}
+footer[aria-label="Save8 footer"] > div > div {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+footer[aria-label="Save8 footer"] h2 { display: none !important; }
+
+/* ---------- link groups (both sizes) ---------- */
+footer[aria-label="Save8 footer"] nav {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(112px, max-content));
+  column-gap: 32px !important;
+  row-gap: 12px !important;
+  align-items: start;
+}
+footer[aria-label="Save8 footer"] nav span[class*="text-white/40"] { display: none !important; }
+footer[aria-label="Save8 footer"] nav::before,
+footer[aria-label="Save8 footer"] nav::after {
+  grid-row: 1;
+  margin-bottom: 4px;
+  font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--s8f-dim);
+}
+footer[aria-label="Save8 footer"] nav::before { content: "Legal"; grid-column: 1; }
+footer[aria-label="Save8 footer"] nav::after  { content: "Help";  grid-column: 2; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(1) { grid-column: 1; grid-row: 2; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(2) { grid-column: 1; grid-row: 3; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(3) { grid-column: 1; grid-row: 4; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(4) { grid-column: 2; grid-row: 2; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(5) { grid-column: 2; grid-row: 3; }
+footer[aria-label="Save8 footer"] nav a {
+  color: var(--s8f-text);
+  font-size: 14px; line-height: 22px;
+  transition: color .15s ease;
+}
+footer[aria-label="Save8 footer"] nav a:hover { color: #fff; }
+
+/* company line: Overline */
+footer[aria-label="Save8 footer"] p:last-of-type {
+  margin: 0 !important;
+  font-size: 12px !important; line-height: 16px !important; font-weight: 500;
+  letter-spacing: .04em; color: var(--s8f-dim) !important;
+}
+
+/* badges a touch smaller */
+footer[aria-label="Save8 footer"] a[aria-label^="Get it on"],
+footer[aria-label="Save8 footer"] a[aria-label^="Download on"] { width: 128px !important; max-width: 128px !important; }
+
+/* ---------- desktop ---------- */
+@media (min-width: 1024px) {
+  footer[aria-label="Save8 footer"] { padding: 0 32px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 32px;
+    row-gap: 0;
+    align-items: start;
+    padding: 32px 0 24px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a { grid-column: 1; grid-row: 1; margin: 0 0 12px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a img { height: 24px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:first-of-type {
+    grid-column: 1; grid-row: 2; max-width: 340px;
+    font-size: 14px !important; line-height: 22px !important; color: var(--s8f-text) !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child {
+    grid-column: 1; grid-row: 3; width: auto !important; margin-top: 20px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child > div { gap: 12px !important; justify-content: flex-start !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > nav {
+    grid-column: 2; grid-row: 1 / 4; margin: 4px 0 0 !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div::after {
+    content: "";
+    grid-column: 1 / -1; grid-row: 4;
+    height: 1px; background: var(--s8f-line);
+    margin: 32px 0 20px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:last-of-type { grid-column: 1 / -1; grid-row: 5; }
+}
+
+/* ---------- phone / tablet ---------- */
+@media (max-width: 1023.98px) {
+  footer[aria-label="Save8 footer"] { padding: 0 !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div {
+    gap: 0 !important;
+    padding: 32px 16px 24px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child,
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > a { order: 1; margin-bottom: 12px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:first-of-type {
+    order: 2; color: var(--s8f-text) !important; font-size: 14px !important; line-height: 22px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:last-child {
+    order: 3; justify-content: flex-start !important; gap: 12px !important; margin-top: 20px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] nav { order: 4; margin-top: 32px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div::after {
+    content: ""; order: 5; height: 1px; background: var(--s8f-line); margin: 32px 0 16px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:last-of-type { order: 6; }
+}

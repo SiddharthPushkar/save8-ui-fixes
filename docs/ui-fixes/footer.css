@@ -1,0 +1,134 @@
+/* Task: footer — v5 "grouped, original style" (user: "now make it in the original style").
+   Keeps the site's own footer look: the rounded navy card (32 desktop / 20 phone,
+   white border on phone), the cream page around it and the "Never Overpay Again." headline.
+   Inside it uses the v4 layout from Mobbin (Shop, Uxcel, MasterClass):
+     - brand column: logo, headline, description, app badges
+     - links in two small labelled groups (Legal / Help)
+     - divider, then the company name
+   Earlier versions kept: footer-v1-card.css, footer-v2-band.css, footer-v3-minimal.css,
+   footer-v4-grouped.css (full-width band).
+   Tokens: Body/Default 14/22 text and links, Overline 12/16 +4% labels,
+   spacing on the 4/8/12/16/20/24/32 scale. Navy #000A7F is the site's own card colour.
+   Same content as the site; CSS only. */
+
+footer[aria-label="Save8 footer"] {
+  --s8f-line: rgba(255, 255, 255, .14);
+  --s8f-text: rgba(255, 255, 255, .72);
+  --s8f-dim: rgba(255, 255, 255, .5);
+}
+
+/* ---------- link groups (both sizes) ---------- */
+footer[aria-label="Save8 footer"] nav {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(112px, max-content));
+  column-gap: 32px !important;
+  row-gap: 12px !important;
+  align-items: start;
+}
+footer[aria-label="Save8 footer"] nav span[class*="text-white/40"] { display: none !important; }
+footer[aria-label="Save8 footer"] nav::before,
+footer[aria-label="Save8 footer"] nav::after {
+  grid-row: 1;
+  margin-bottom: 4px;
+  font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--s8f-dim);
+}
+footer[aria-label="Save8 footer"] nav::before { content: "Legal"; grid-column: 1; }
+footer[aria-label="Save8 footer"] nav::after  { content: "Help";  grid-column: 2; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(1) { grid-column: 1; grid-row: 2; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(2) { grid-column: 1; grid-row: 3; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(3) { grid-column: 1; grid-row: 4; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(4) { grid-column: 2; grid-row: 2; }
+footer[aria-label="Save8 footer"] nav > span:nth-child(5) { grid-column: 2; grid-row: 3; }
+footer[aria-label="Save8 footer"] nav a {
+  color: var(--s8f-text);
+  font-size: 14px; line-height: 22px;
+  transition: color .15s ease;
+}
+footer[aria-label="Save8 footer"] nav a:hover { color: #fff; }
+
+/* company line: Overline */
+footer[aria-label="Save8 footer"] p:last-of-type {
+  margin: 0 !important;
+  font-size: 12px !important; line-height: 16px !important; font-weight: 500;
+  letter-spacing: .04em; color: var(--s8f-dim) !important;
+}
+
+/* App Store badge first (Apple's badge guidelines), on every size */
+footer[aria-label="Save8 footer"] a[aria-label="Download on the App Store"] { order: -1; }
+
+/* ---------- desktop: three balanced columns (brand | links | apps) ---------- */
+@media (min-width: 1024px) {
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div {
+    display: grid !important;
+    /* four columns: brand | Legal | Help | Get the app.
+       space-between gives the same empty space between every pair of columns. */
+    grid-template-columns: minmax(0, 340px) max-content max-content 144px;
+    justify-content: space-between;
+    column-gap: 48px;
+    row-gap: 0;
+    align-items: start;
+    padding: 40px 48px 32px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a { grid-column: 1; grid-row: 1; margin: 0 0 16px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > h2 { grid-column: 1; grid-row: 2; margin: 0 0 8px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:first-of-type {
+    grid-column: 1; grid-row: 3;
+    font-size: 14px !important; line-height: 22px !important; color: var(--s8f-text) !important;
+  }
+  /* links: Legal and Help sit on the card's own columns 2 and 3 (subgrid),
+     so their spacing matches the gaps around the brand and the app badges */
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > nav {
+    grid-column: 2 / 4; grid-row: 1 / 4; margin: 0 !important;
+    grid-template-columns: subgrid; column-gap: normal !important;
+  }
+  /* app badges: right column, stacked */
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child {
+    grid-column: 4; grid-row: 1 / 4; width: 144px !important; margin: 0;
+  }
+  /* "Get the app" label, same style and spacing as Legal / Help */
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child::before {
+    content: "Get the app";
+    display: block;
+    margin-bottom: 16px;
+    font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--s8f-dim);
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child > div {
+    flex-direction: column !important; align-items: stretch !important; gap: 12px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child > div > a {
+    width: 144px !important; max-width: 144px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div::after {
+    content: "";
+    grid-column: 1 / -1; grid-row: 4;
+    height: 1px; background: var(--s8f-line);
+    margin: 32px 0 20px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:last-of-type { grid-column: 1 / -1; grid-row: 5; }
+}
+
+/* ---------- phone / tablet ---------- */
+@media (max-width: 1023.98px) {
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div { gap: 0 !important; padding: 24px 16px 20px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child,
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > a { order: 1; margin-bottom: 16px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] h2 { order: 2; margin-bottom: 8px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:first-of-type {
+    order: 3; color: var(--s8f-text) !important; font-size: 14px !important; line-height: 22px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:last-child { order: 4; margin-top: 20px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] nav {
+    order: 5; margin-top: 28px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div::after {
+    content: ""; order: 6; height: 1px; background: var(--s8f-line); margin: 24px 0 16px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:last-of-type { order: 7; }
+}

@@ -1,0 +1,148 @@
+/* Task: footer — v2 "full-bleed band" (user: "try completely new footer style").
+   v1 (navy card) is kept in footer-v1-card.css; link that file instead to switch back.
+   Refs (Mobbin): Jeton (giant brand wordmark), Shop (app download block).
+     - the footer is a full-width Save8 navy band with rounded top corners (not a card)
+     - big "Never Overpay Again." headline; "Get the Save8 app" + stacked badges on the right
+     - divider, then a bottom bar: legal links left, company right
+     - a huge faint Save8 wordmark at the very bottom, cropped by the edge
+   Same content as the site; CSS only. */
+
+footer[aria-label="Save8 footer"] {
+  --s8f-blue: #000A7F;
+  --s8f-line: rgba(255, 255, 255, .16);
+  --s8f-text: rgba(255, 255, 255, .74);
+  --s8f-dim: rgba(255, 255, 255, .5);
+  position: relative;
+  overflow: hidden;
+  margin-top: 32px;
+  border-top: 0 !important;
+  border-radius: 40px 40px 0 0;
+  background:
+    radial-gradient(55% 70% at 85% 0%, rgba(92, 120, 255, .30) 0%, rgba(92, 120, 255, 0) 70%),
+    radial-gradient(45% 60% at 0% 100%, rgba(255, 122, 40, .10) 0%, rgba(255, 122, 40, 0) 70%),
+    var(--s8f-blue) !important;
+}
+/* the old card becomes transparent — the band is the surface now */
+footer[aria-label="Save8 footer"] > div > div {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+/* giant faint wordmark, cropped by the bottom edge */
+footer[aria-label="Save8 footer"]::after {
+  content: "";
+  display: block;
+  height: clamp(110px, 21vw, 300px);
+  margin: 8px auto -6%;
+  max-width: 1200px;
+  background: url("/assets/icons/save8-logo.webp") center top / contain no-repeat;
+  filter: brightness(0) invert(1);
+  opacity: .07;
+  pointer-events: none;
+}
+
+/* links: no dots, clear hover */
+footer[aria-label="Save8 footer"] nav span[class*="text-white/40"] { display: none !important; }
+footer[aria-label="Save8 footer"] nav a {
+  color: var(--s8f-text);
+  font-weight: 500;
+  text-underline-offset: 4px;
+  transition: color .15s ease;
+}
+footer[aria-label="Save8 footer"] nav a:hover { color: #fff; text-decoration: underline; }
+
+/* "Get the Save8 app" label */
+footer[aria-label="Save8 footer"] div:has(> div > a[href*="play.google.com"])::before,
+footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div::before {
+  content: "Get the Save8 app";
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--s8f-dim);
+}
+
+/* ---------- desktop ---------- */
+@media (min-width: 1024px) {
+  footer[aria-label="Save8 footer"] { padding: 0 32px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 72px;
+    row-gap: 0;
+    align-items: end;
+    padding: 72px 0 0 !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a { grid-column: 1; grid-row: 1; margin-bottom: 28px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > a img { height: 30px !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > h2 {
+    grid-column: 1; grid-row: 2;
+    font-size: clamp(48px, 5.4vw, 76px) !important;
+    line-height: 1 !important;
+    letter-spacing: -.02em;
+    margin-bottom: 18px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:first-of-type {
+    grid-column: 1; grid-row: 3; max-width: 520px;
+    font-size: 16px !important; line-height: 26px !important; color: var(--s8f-text) !important;
+  }
+  /* app block: stacked badges, bottom-aligned with the text */
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child {
+    grid-column: 2; grid-row: 1 / 4; align-self: end;
+    width: 170px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child::before { margin-bottom: 14px; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child > div {
+    flex-direction: column !important; align-items: stretch !important; gap: 10px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:last-child > div > a { width: 100% !important; max-width: none !important; }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div::after {
+    content: "";
+    grid-column: 1 / -1; grid-row: 4;
+    height: 1px; background: var(--s8f-line);
+    margin: 48px 0 22px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > nav {
+    grid-column: 1; grid-row: 5; margin: 0 !important;
+    column-gap: 28px !important; font-size: 15px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="max-w-6xl"] > div > div:first-child > p:last-of-type {
+    grid-column: 2; grid-row: 5; justify-self: end; align-self: center; margin: 0 !important;
+    font-size: 11px !important; font-weight: 600; letter-spacing: .12em; color: var(--s8f-dim) !important;
+  }
+}
+
+/* ---------- phone / tablet ---------- */
+@media (max-width: 1023.98px) {
+  footer[aria-label="Save8 footer"] { padding: 0 !important; border-radius: 28px 28px 0 0; margin-top: 24px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div {
+    gap: 0 !important;
+    padding: 40px 20px 0 !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child,
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div { display: contents !important; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > a { order: 1; margin-bottom: 22px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] h2 {
+    order: 2; font-size: 40px !important; line-height: 42px !important; letter-spacing: -.02em; margin-bottom: 12px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:first-of-type {
+    order: 3; color: var(--s8f-text) !important; font-size: 15px !important; line-height: 23px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div::before { order: 4; margin: 30px 0 12px; }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:last-child {
+    order: 5; justify-content: flex-start !important; gap: 10px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div::after {
+    content: ""; order: 6; height: 1px; background: var(--s8f-line); margin: 30px 0 18px;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] nav {
+    order: 7; column-gap: 20px !important; row-gap: 10px !important; font-size: 15px !important;
+  }
+  footer[aria-label="Save8 footer"] > div[class*="lg:hidden"] > div > div:first-child > div > p:last-of-type {
+    order: 8; margin-top: 14px; font-size: 11px !important; font-weight: 600; letter-spacing: .12em; color: var(--s8f-dim) !important;
+  }
+  footer[aria-label="Save8 footer"]::after { margin-top: 18px; height: 100px; margin-left: 12px; margin-right: 12px; }
+}
