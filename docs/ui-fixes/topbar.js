@@ -233,6 +233,25 @@
     if (!flight && hero && hero.style.opacity === "0" && (!PHONE() || !header || header.getAttribute("data-s8-tabs") !== "out")) restoreHero();
   }, 1000);
 
+  /* ---------- Save8 logo opens the task list ----------
+     Local (serve.py): /tasks. GitHub Pages preview: /save8-ui-fixes/tasks.html.
+     Clicks are caught before the site's own link handling; the href is updated too so
+     hovering / opening in a new tab shows the right page. */
+  const TASKS_URL = location.pathname.startsWith("/save8-ui-fixes") ? "/save8-ui-fixes/tasks.html" : "/tasks";
+  const LOGO = 'a[aria-label="Save8 home"]';
+  document.addEventListener("click", (e) => {
+    const a = e.target && e.target.closest && e.target.closest(LOGO);
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    e.stopPropagation();
+    location.href = TASKS_URL;
+  }, true);
+  const fixLogoLinks = () => document.querySelectorAll(LOGO).forEach((a) => {
+    if (a.getAttribute("href") !== TASKS_URL) { a.setAttribute("href", TASKS_URL); a.title = "Open the task list"; }
+  });
+  fixLogoLinks();
+  setInterval(fixLogoLinks, 1000);
+
   /* ---------- Phone: tell the CSS when the tab row leaves / returns ----------
      The site toggles opacity-0 on the tab row (header's 3rd child). Mirror that as
      header[data-s8-tabs="out"|"in"] so the tab/edge animations in topbar.css play only on

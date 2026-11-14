@@ -91,6 +91,9 @@ def build():
             for f in fs:
                 os.remove(os.path.join(dp, f))
     shutil.copytree(SITE, OUT, dirs_exist_ok=True)
+    # the task list (the Save8 logo links here); read-only on Pages
+    for f in ("tasks.html", "tasks.json"):
+        shutil.copy2(os.path.join(HERE, f), os.path.join(OUT, f))
     n = 0
     for dp, _, fs in os.walk(OUT):
         for f in fs:

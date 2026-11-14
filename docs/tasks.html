@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Save8 UI Fixes</title>
+<link rel="icon" href="/save8-ui-fixes/favicon-32x32.png">
+<style>
+@font-face{font-family:"Inter";src:url("/save8-ui-fixes/fonts/inter/Inter-latin-variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"League Spartan";src:url("/save8-ui-fixes/fonts/league-spartan/LeagueSpartan-latin-variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+:root{
+  --bg:#f6f3ec; --surface:#fff; --line:#e7e2d6; --text:#16201a; --muted:#6b736d;
+  --green:#0d6b3c; --green-2:#0a5530; --green-soft:#e6f1ea;
+  --orange:#f2661c; --orange-soft:#fdeee5;
+  --done:#2f8a57; --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,sans-serif;min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+
+header{background:linear-gradient(180deg,var(--green-2),var(--green));color:#fff}
+.bar{max-width:960px;margin:0 auto;padding:20px 24px 28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;opacity:.9}
+.brand img{height:22px}
+a.brand{color:inherit;text-decoration:none}
+h1{font:700 34px/1.1 "League Spartan",sans-serif;margin-top:18px;letter-spacing:-.01em}
+.stats{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 12px;font-size:13px}
+.stat b{font-weight:700;margin-right:4px}
+
+main{max-width:960px;margin:0 auto;padding:24px}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.tabs{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+.tabs button{border:0;background:none;padding:6px 14px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:500}
+.tabs button.on{background:var(--green);color:#fff}
+.spacer{flex:1}
+.btn{border:0;border-radius:999px;padding:9px 16px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--orange);color:#fff}
+.btn-primary:hover{filter:brightness(.95)}
+.btn-ghost{background:transparent;color:var(--muted)}
+
+form.add{display:none;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:16px;gap:10px;grid-template-columns:1fr 180px auto}
+form.add.open{display:grid}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;color:var(--muted);font-weight:500}
+.field input,.field select{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;outline:none}
+.field input:focus,.field select:focus{border-color:var(--green)}
+form.add .actions{display:flex;align-items:flex-end;gap:6px}
+
+.list{display:flex;flex-direction:column;gap:10px}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:14px;transition:box-shadow .15s}
+.task:hover{box-shadow:0 4px 18px rgba(20,40,25,.06)}
+.check{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);background:#fff;cursor:pointer;flex:none;display:grid;place-items:center}
+.check svg{width:12px;height:12px;opacity:0}
+.task[data-status=doing] .check{border-color:var(--orange);background:var(--orange-soft)}
+.task[data-status=done] .check{border-color:var(--done);background:var(--done)}
+.task[data-status=done] .check svg{opacity:1}
+.body{flex:1;min-width:0}
+.title{font-weight:600;font-size:15px}
+.task[data-status=done] .title{color:var(--muted);text-decoration:line-through}
+.meta{display:flex;gap:8px;align-items:center;margin-top:4px;color:var(--muted);font-size:12.5px}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--green-soft);color:var(--green);border-radius:999px;padding:2px 9px;font-weight:600;font-size:12px}
+.status{font-weight:600}
+.task[data-status=todo] .status{color:var(--muted)}
+.task[data-status=doing] .status{color:var(--orange)}
+.task[data-status=done] .status{color:var(--done)}
+.open{background:var(--green);color:#fff;border-radius:999px;padding:8px 14px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.open:hover{background:var(--green-2)}
+.del{border:0;background:none;color:var(--muted);cursor:pointer;padding:6px;border-radius:8px;opacity:0;transition:opacity .15s}
+.task:hover .del{opacity:1}
+.del:hover{color:#c0392b;background:#fbecea}
+.empty{text-align:center;color:var(--muted);padding:48px 0}
+.err{display:none;background:var(--orange-soft);color:#9a3d0c;border-radius:10px;padding:10px 14px;margin-bottom:12px}
+
+@media (max-width:640px){
+  .bar,main{padding-left:16px;padding-right:16px}
+  h1{font-size:28px}
+  form.add.open{grid-template-columns:1fr}
+  .task{flex-wrap:wrap}
+  .body{flex-basis:calc(100% - 40px)}
+  .open{margin-left:36px}
+  .del{opacity:1}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" id="homeLink" href="/" title="Open the home page"><img src="/save8-ui-fixes/assets/icons/save8-logo.webp" alt="Save8"> UI fixes</a>
+    <h1>Tasks</h1>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<main>
+  <div class="err" id="err">Couldn't save. Is serve.py running?</div>
+
+  <div class="toolbar">
+    <div class="tabs" id="tabs">
+      <button data-f="all" class="on">All</button>
+      <button data-f="todo">To do</button>
+      <button data-f="doing">In progress</button>
+      <button data-f="done">Done</button>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-primary" id="addBtn">+ New task</button>
+  </div>
+
+  <form class="add" id="addForm" autocomplete="off">
+    <div class="field">
+      <label for="fTitle">Task</label>
+      <input id="fTitle" required placeholder="Fix …">
+    </div>
+    <div class="field">
+      <label for="fPage">Page</label>
+      <select id="fPage"></select>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-ghost" id="cancel">Cancel</button>
+      <button class="btn btn-primary">Add</button>
+    </div>
+  </form>
+
+  <div class="list" id="list"></div>
+</main>
+
+<script>
+// Pages of the local site copy. Add more here as they get mirrored.
+const PAGES = [
+  { name: "Home", path: "/" },
+  { name: "Gift Card", path: "/gift-cards" },
+  { name: "Sales Calendar", path: "/sales-calendar" },
+];
+const NEXT = { todo: "doing", doing: "done", done: "todo" };
+const LABEL = { todo: "To do", doing: "In progress", done: "Done" };
+
+let tasks = [];
+let filter = "all";
+const $ = (s) => document.querySelector(s);
+// Local (serve.py) runs at the site root; the GitHub Pages preview lives under /save8-ui-fixes
+const BASE = location.pathname.startsWith("/save8-ui-fixes") ? "/save8-ui-fixes" : "";
+const LIVE = BASE !== "";
+$("#homeLink").href = BASE + "/";
+if (LIVE) $("#err").textContent = "Live preview: changes here aren't saved. Edit tasks.json in the repo to update the list.";
+
+async function load() {
+  const r = await fetch(BASE + "/tasks.json", { cache: "no-store" });
+  tasks = await r.json();
+  render();
+}
+
+async function save() {
+  if (LIVE) { $("#err").style.display = "block"; return; }
+  try {
+    const r = await fetch("/tasks.json", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tasks, null, 2),
+    });
+    if (!r.ok) throw 0;
+    $("#err").style.display = "none";
+  } catch {
+    $("#err").style.display = "block";
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+
+function render() {
+  const n = (s) => tasks.filter((t) => t.status === s).length;
+  $("#stats").innerHTML =
+    `<span class="stat"><b>${tasks.length}</b>tasks</span>` +
+    `<span class="stat"><b>${n("todo")}</b>to do</span>` +
+    `<span class="stat"><b>${n("doing")}</b>in progress</span>` +
+    `<span class="stat"><b>${n("done")}</b>done</span>`;
+
+  const shown = tasks.filter((t) => filter === "all" || t.status === filter);
+  $("#list").innerHTML = shown.length
+    ? shown
+        .map(
+          (t) => `
+    <div class="task" data-status="${t.status}" data-id="${t.id}">
+      <button class="check" data-act="cycle" title="Change status">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.5l4.5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="body">
+        <div class="title">${esc(t.title)}</div>
+        <div class="meta">
+          <span class="chip">${esc(t.page)}</span>
+          <span class="status">${LABEL[t.status]}</span>
+        </div>
+      </div>
+      <a class="open" href="${esc(BASE + t.path)}" target="_blank" rel="noopener">Open page →</a>
+      <button class="del" data-act="del" title="Delete">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
+      </button>
+    </div>`
+        )
+        .join("")
+    : `<div class="empty">No tasks</div>`;
+}
+
+$("#list").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-act]");
+  if (!btn) return;
+  const id = btn.closest(".task").dataset.id;
+  const t = tasks.find((x) => x.id === id);
+  if (btn.dataset.act === "cycle") t.status = NEXT[t.status];
+  if (btn.dataset.act === "del") {
+    if (!confirm(`Delete "${t.title}"?`)) return;
+    tasks = tasks.filter((x) => x.id !== id);
+  }
+  render();
+  save();
+});
+
+$("#tabs").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  filter = b.dataset.f;
+  document.querySelectorAll("#tabs button").forEach((x) => x.classList.toggle("on", x === b));
+  render();
+});
+
+$("#fPage").innerHTML = PAGES.map((p, i) => `<option value="${i}">${p.name}</option>`).join("");
+$("#addBtn").onclick = () => { $("#addForm").classList.add("open"); $("#fTitle").focus(); };
+$("#cancel").onclick = () => $("#addForm").classList.remove("open");
+$("#addForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const p = PAGES[$("#fPage").value];
+  tasks.push({
+    id: "t" + Date.now(),
+    title: $("#fTitle").value.trim(),
+    page: p.name,
+    path: p.path,
+    status: "todo",
+    created: new Date().toISOString().slice(0, 10),
+  });
+  e.target.reset();
+  e.target.classList.remove("open");
+  render();
+  save();
+});
+
+load();
+</script>
+</body>
+</html>

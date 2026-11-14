@@ -23,6 +23,7 @@ header{background:linear-gradient(180deg,var(--green-2),var(--green));color:#fff
 .bar{max-width:960px;margin:0 auto;padding:20px 24px 28px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:600;opacity:.9}
 .brand img{height:22px}
+a.brand{color:inherit;text-decoration:none}
 h1{font:700 34px/1.1 "League Spartan",sans-serif;margin-top:18px;letter-spacing:-.01em}
 .stats{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
 .stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 12px;font-size:13px}
@@ -86,7 +87,7 @@ form.add .actions{display:flex;align-items:flex-end;gap:6px}
 <body>
 <header>
   <div class="bar">
-    <div class="brand"><img src="/assets/icons/save8-logo.webp" alt="Save8"> UI fixes</div>
+    <a class="brand" id="homeLink" href="/" title="Open the home page"><img src="/assets/icons/save8-logo.webp" alt="Save8"> UI fixes</a>
     <h1>Tasks</h1>
     <div class="stats" id="stats"></div>
   </div>
@@ -137,14 +138,20 @@ const LABEL = { todo: "To do", doing: "In progress", done: "Done" };
 let tasks = [];
 let filter = "all";
 const $ = (s) => document.querySelector(s);
+// Local (serve.py) runs at the site root; the GitHub Pages preview lives under /save8-ui-fixes
+const BASE = location.pathname.startsWith("/save8-ui-fixes") ? "/save8-ui-fixes" : "";
+const LIVE = BASE !== "";
+$("#homeLink").href = BASE + "/";
+if (LIVE) $("#err").textContent = "Live preview: changes here aren't saved. Edit tasks.json in the repo to update the list.";
 
 async function load() {
-  const r = await fetch("/tasks.json", { cache: "no-store" });
+  const r = await fetch(BASE + "/tasks.json", { cache: "no-store" });
   tasks = await r.json();
   render();
 }
 
 async function save() {
+  if (LIVE) { $("#err").style.display = "block"; return; }
   try {
     const r = await fetch("/tasks.json", {
       method: "POST",
@@ -186,7 +193,7 @@ function render() {
           <span class="status">${LABEL[t.status]}</span>
         </div>
       </div>
-      <a class="open" href="${esc(t.path)}" target="_blank" rel="noopener">Open page →</a>
+      <a class="open" href="${esc(BASE + t.path)}" target="_blank" rel="noopener">Open page →</a>
       <button class="del" data-act="del" title="Delete">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
       </button>
