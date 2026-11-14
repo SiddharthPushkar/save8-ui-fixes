@@ -1,0 +1,224 @@
+/* Task: Scrolled top bar — match the main header's proportions + animate the switch.
+
+   The site swaps the green <header> (66px, 24px side padding, 36px menu, 75x24 logo,
+   38px controls) for a separate cream bar when you scroll (82px, 32px padding, 44px menu,
+   88x28 logo, 54px search, empty right side). Both switches were hard cuts.
+
+   Here the bar copies the header's height, padding, menu and logo (the search bar keeps
+   its original size, per user), gets the header's location + Login on the
+   right (injected by topbar.js), and the swap animates (v2, per user: "this is already
+   there — change the colour softly, put the bar on it, dissolve the tabs, line moves up"):
+     in:  the existing header stays; its colour softens from green to cream, its own
+          content fades, the Agent8 / Gift Card / Sales Calendar tabs dissolve while the
+          header's bottom edge moves up to 66px, and the bar's content fades in on top
+          (no slide). Contents stagger left -> search -> right.
+     out: the same in reverse — bar content fades, cream softens back to green, tabs
+          return as the edge moves down.
+   Curve cubic-bezier(.32,.72,0,1) is the one the site already uses on its header. */
+
+:root {
+  --s8-spring: cubic-bezier(.32, .72, 0, 1);
+  --s8-exit: cubic-bezier(.4, 0, 1, 1);
+}
+
+/* ---------- Header stays; colour softens green -> cream (desktop only) ----------
+   Phone keeps the site's own instant swap: there the site collapses the tabs instantly and
+   corrects the scroll position in the same frame. Animating that height (as below) made
+   the content jump on phones. Phone timing is fixed in the site script instead:
+   _next/static/chunks/039pw4_uca5i..js, useLandingStickyBottomVisible — the header now
+   switches when the hero search slips under the header (bottom < header bottom), not when
+   it reaches y=8. Original kept as save8-ui-fixes/039pw4_uca5i..js.orig. */
+@media (min-width: 1024px) {
+header.sticky {
+  transition-property: color, background-color, box-shadow, opacity !important;
+  transition-duration: .45s !important;
+  transition-timing-function: ease !important;
+}
+/* The site hides the header (opacity-0) when the bar shows. Keep it, turn it cream. */
+header.sticky.opacity-0 {
+  opacity: 1 !important;
+  visibility: visible !important;                  /* site also sets visibility:hidden */
+  background-color: #F7F4ED !important;            /* = bar (bg-lp-warm) */
+  box-shadow: 0 1px 0 rgba(14, 15, 12, .06) !important;
+}
+/* Its own menu + logo fade out under the bar's copy. Location + Login do NOT fade:
+   the bar's copies sit on the same pixels, so they stay perfectly still. */
+header.sticky > nav > * { transition: opacity .3s ease .08s; }
+header.sticky.opacity-0 > nav > *:not(:has(button[aria-label="Set location"])) {
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+
+/* Tabs move (no dissolve): the edge moves up/down with the tab row's height, and the tabs
+   slide out of / into view behind it (slide rules below apply at every width). */
+header.sticky > div:nth-child(3) {
+  transition: grid-template-rows .46s var(--s8-spring) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+} /* end desktop-only header rules */
+
+/* ---------- Scrolled bar: proportions ---------- */
+.s8-bar {
+  box-shadow: 0 1px 0 rgba(14, 15, 12, .06), 0 8px 24px rgba(14, 15, 12, .06) !important;
+}
+.s8-bar > div:first-child {                     /* row */
+  height: 66px;
+  padding: 0 24px !important;                    /* = header px-6 */
+  gap: 12px;
+}
+.s8-bar [aria-label="Open menu"] {              /* = header menu 36 */
+  width: 36px !important;
+  height: 36px !important;
+}
+.s8-bar img[alt="Save8"] {                      /* = header logo 75x24 */
+  height: 24px !important;
+  width: auto !important;
+}
+/* Search bar: left at the site's original size (user request). */
+
+/* Left group (menu + logo) never shrinks under the search bar. */
+.s8-bar > div:first-child > :first-child { flex: 1 0 auto !important; }
+
+/* Right side: location + Login copies. The spacer grows to fit them. */
+.s8-bar > div:first-child > :last-child {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1 0 auto !important;
+}
+.s8-bar-actions > * { flex-shrink: 0 !important; }
+.s8-bar-actions button[aria-label="Set location"] > span { flex: none !important; }
+/* When scrolled, the site switches location to a compact 36px icon (size-9).
+   Keep the full pill in the bar so it matches the header. */
+@media (min-width: 1024px) {
+  .s8-bar-actions button[aria-label="Set location"] {
+    width: auto !important;
+    height: 38px !important;
+  }
+}
+.s8-bar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;                                      /* = header's gap-3, so nothing shifts */
+  min-width: 0;
+  width: 100%;
+}
+/* Location + Login never move: the copies sit exactly on the header's buttons, keep the
+   same style, and appear/disappear instantly (no fade, no slide). */
+.s8-bar .s8-bar-actions { animation: none !important; opacity: 1; }
+.s8-bar.s8-bar-leave .s8-bar-actions { opacity: 0; }
+
+/* ---------- Scrolled bar: motion ---------- */
+/* No slide. While switching, the bar has no fill of its own: the header's colour change
+   (green -> cream) is the only colour change, so the header and bar read as one surface.
+   The bar only fades its contents in/out on top. */
+@keyframes s8-bar-hold { from { opacity: 1; } to { opacity: 1; } }   /* timer for the enter class */
+@keyframes s8-bar-out  { from { opacity: 1; } to { opacity: 0; } }
+.s8-bar.s8-bar-enter,
+.s8-bar.s8-bar-leave {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+@keyframes s8-item-in  { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes s8-search-in{ from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes s8-right-in { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+
+.s8-bar.s8-bar-enter { animation: s8-bar-hold .7s linear both; }
+.s8-bar.s8-bar-enter > div:first-child > :nth-child(1) { animation: s8-item-in   .38s var(--s8-spring) .12s both; }
+.s8-bar.s8-bar-enter > div:first-child > :nth-child(2) { animation: s8-search-in .42s var(--s8-spring) .18s both; }
+
+.s8-bar.s8-bar-leave {
+  animation: s8-bar-out .22s ease-in both;
+  pointer-events: none;
+}
+/* Once the enter finishes the bar takes its cream fill back; the header is cream by then,
+   so nothing visibly changes. */
+.s8-bar { transition: background-color .2s ease, box-shadow .3s ease; }
+
+/* ---------- Phone: tabs leave / return with the header edge ----------
+   Matches the Figma motion frame. topbar.js sets header[data-s8-tabs] to "out"/"in"
+   whenever the site collapses / restores the tab row, so nothing plays on page load.
+     back to full ("in"): edge moves down first (small overshoot), then the tabs rise
+                          from below one after another with a little bounce.
+     to compact ("out"):  tabs lift a touch, sink and fade; then the edge moves up
+                          (small overshoot). Scroll compensation in topbar.js keeps the
+                          page content still while the header height changes. */
+/* Tabs move, they don't fade: the tab row clips its content, so sliding them below its
+   bottom edge hides them behind the hero; sliding up reveals them, fully solid. */
+@keyframes s8-tab-rise { from { transform: translateY(36px); } to { transform: none; } }
+@keyframes s8-tab-drop {
+  0%   { transform: none; }
+  20%  { transform: translateY(-3px); }
+  100% { transform: translateY(40px); }
+}
+@keyframes s8-edge-settle { 0%, 45% { padding-bottom: 0; } 72% { padding-bottom: 4px; } 100% { padding-bottom: 0; } }
+@keyframes s8-edge-up     { 0%, 50% { margin-bottom: 0; } 76% { margin-bottom: -3px; } 100% { margin-bottom: 0; } }
+
+@media (max-width: 1023.98px) {
+  /* the site restores the tab row instantly on phones; give the edge time to move */
+  header.sticky > div:nth-child(3) {
+    transition: grid-template-rows .34s var(--s8-spring), opacity .18s ease !important;
+  }
+  /* collapse together with the search slot opening (both 0.3s), so the edge moves once */
+  header.sticky > div:nth-child(3).opacity-0 {
+    transition: grid-template-rows .3s var(--s8-spring) !important;
+  }
+  /* the tab row never fades; the tabs slide out of / into view instead */
+  header.sticky > div:nth-child(3) { opacity: 1 !important; }
+  /* the header's search slot is a 0fr/1fr grid, but its child doesn't clip, so it snapped
+     open (and closed late). Clipping lets it open/close over 0.3s with the tabs, so the
+     header edge moves in one smooth step instead of dipping first. */
+  header.sticky > div:first-child > div:nth-child(2) > div { min-height: 0; overflow: hidden; }
+
+  /* header search pill stays invisible while the hero search flies into it */
+  header.sticky.s8-docking form { opacity: 0; transition: none; }
+  header.sticky form { transition: opacity .16s ease-out; }
+  /* No padding/overshoot under the tabs on the way back: that opened a gap between the
+     Agent8 tab and the hero. The edge still moves down first (grid opening), then the tabs
+     rise and land flush, with no overshoot past their resting spot. */
+}
+
+/* ---------- Tabs slide out / in with the header edge (phone AND desktop) ----------
+   topbar.js sets header[data-s8-tabs] on a real switch. The tab row clips its content, so
+   sliding a tab below the row's bottom hides it behind the hero; sliding up reveals it.
+     "out" (going compact): tabs lift a touch, then slide down out of view while the edge
+                            moves up (small overshoot).
+     "in"  (back to full):  the edge moves down first, then the tabs slide up into view one
+                            after another, fully solid, landing flush on the hero. */
+header.sticky[data-s8-tabs="out"] > div:nth-child(3) { animation: s8-edge-up .62s ease-out .12s both; }
+
+header.sticky[data-s8-tabs="in"] [class*="sectionRail-module"][class*="__tile"] {
+  animation: s8-tab-rise .5s cubic-bezier(.22, 1, .36, 1) .12s both;
+}
+header.sticky[data-s8-tabs="in"] [class*="__rail"] > :nth-child(2) { animation-delay: .155s; }
+header.sticky[data-s8-tabs="in"] [class*="__rail"] > :nth-child(3) { animation-delay: .19s; }
+
+header.sticky[data-s8-tabs="out"] [class*="sectionRail-module"][class*="__tile"] {
+  animation: s8-tab-drop .28s ease-in both;
+}
+header.sticky[data-s8-tabs="out"] [class*="__rail"] > :nth-child(2) { animation-delay: .035s; }
+header.sticky[data-s8-tabs="out"] [class*="__rail"] > :nth-child(3) { animation-delay: .07s; }
+
+/* the flying copy of the hero search (phone) — position/size are set per frame by topbar.js */
+.s8-fly {
+  position: fixed !important;
+  z-index: 70;
+  margin: 0 !important;
+  box-sizing: border-box;
+  pointer-events: none;
+  will-change: left, top, width, height;
+}
+.s8-fly button, .s8-fly svg { flex-shrink: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .s8-fly { display: none; }
+  header.sticky[data-s8-tabs] > div:nth-child(3),
+  header.sticky[data-s8-tabs] [class*="__tile"] { animation: none !important; }
+  header.sticky,
+  header.sticky > nav,
+  header.sticky > div:nth-child(3) { transition-duration: 0s !important; filter: none !important; }
+  .s8-bar.s8-bar-enter,
+  .s8-bar.s8-bar-enter * ,
+  .s8-bar.s8-bar-leave { animation-duration: .01s !important; animation-delay: 0s !important; }
+}

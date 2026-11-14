@@ -1,0 +1,12 @@
+<svg width="30" height="30" viewBox="5 2 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Save8 illustrated icon/location — pin only (map layers removed), recentred.
+     From Figma "Result page" node 287:246. -->
+<path d="M20 2.5C14 2.5 9.16669 7.16667 9.16669 13C9.16669 20.8333 20 31.6667 20 31.6667C20 31.6667 30.8334 20.8333 30.8334 13C30.8334 7.16667 26 2.5 20 2.5Z" fill="url(#s8loc_b)"/>
+<path opacity="0.14" d="M20 2.5C14 2.5 9.16669 7.16667 9.16669 13C9.16669 20.8333 20 31.6667 20 31.6667V2.5Z" fill="white"/>
+<path d="M20 17.75C22.6694 17.75 24.8334 15.5861 24.8334 12.9167C24.8334 10.2473 22.6694 8.08337 20 8.08337C17.3306 8.08337 15.1667 10.2473 15.1667 12.9167C15.1667 15.5861 17.3306 17.75 20 17.75Z" fill="white"/>
+<path d="M20 15.25C21.2887 15.25 22.3334 14.2054 22.3334 12.9167C22.3334 11.628 21.2887 10.5834 20 10.5834C18.7114 10.5834 17.6667 11.628 17.6667 12.9167C17.6667 14.2054 18.7114 15.25 20 15.25Z" fill="url(#s8loc_o)"/>
+<defs>
+<linearGradient id="s8loc_b" x1="9.16669" y1="2.5" x2="9.16669" y2="31.6667" gradientUnits="userSpaceOnUse"><stop stop-color="#7AA5F4"/><stop offset="1" stop-color="#2E5CC8"/></linearGradient>
+<linearGradient id="s8loc_o" x1="17.6667" y1="10.5834" x2="17.6667" y2="15.25" gradientUnits="userSpaceOnUse"><stop stop-color="#FFA75E"/><stop offset="1" stop-color="#E6651A"/></linearGradient>
+</defs>
+</svg>

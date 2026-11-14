@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,779988,i=>{"use strict";i.i(466122);var o=i.i(862897);i.s(["LandingMarketingBelowFold",()=>o.LandingMarketingBelowFold])},40434,i=>{i.n(i.i(779988))}]);

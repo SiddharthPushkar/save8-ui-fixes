@@ -1,0 +1,158 @@
+/* Task: Fix location icon on home page
+
+   Mobbin references: Walmart web (pill with icon, two-line label, chevron in the header),
+   Swiggy + Blinkit iOS (small label over the place name, chevron), DoorDash / Amazon web.
+
+   v3: the translucent pill (white 8% on #025332) was too faint to see. Now a solid
+   Save8 cream pill (#F7F4ED = page background below the hero) with dark text:
+   clearly visible, softer than pure white, and the orange Login still leads on colour.
+   Height matches Login (38px).
+
+   Icon: Save8 colour icon/location (Figma "Result page" 287:246 -> ./icons/icon-location.svg).
+   On a light surface it needs no chip (save8-icon-system.md: chips only on dark backgrounds).
+   Top line "Showing prices for" = Save8 results-page location header copy.
+   Text colours from the results-page palette: ink #0E0F0C, muted #6A6C6A, green #007A45.
+
+   The site's React <svg> is hidden and replaced with pseudo-elements, so hydration and
+   re-renders can't undo it. */
+
+button[aria-label="Set location"] {
+  --s8-cream: #F7F4ED;
+  --s8-cream-hover: #EFEADF;
+  --s8-ink: #0E0F0C;
+  --s8-muted: #6A6C6A;
+  --s8-green: #007A45;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+button[aria-label="Set location"]:active { transform: scale(.97); }
+button[aria-label="Set location"] > svg { display: none !important; }
+
+/* Colour pin */
+button[aria-label="Set location"]::before {
+  content: "";
+  flex: none;
+  width: 26px;
+  height: 26px;
+  background: url("/save8-ui-fixes/ui-fixes/icons/icon-location-pin.svg") center / contain no-repeat;   /* pin only, no map */
+}
+
+/* ---------- Desktop (lg+): cream pill, two-line label ---------- */
+@media (min-width: 1024px) {
+  button[aria-label="Set location"],
+  button[aria-label="Set location"]:hover {
+    height: 38px;
+    max-width: 15rem;
+    padding: 0 12px 0 8px;
+    gap: 8px;
+    background-color: var(--s8-cream);
+    border: 1px solid rgba(255, 255, 255, .6);
+    color: var(--s8-ink);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .14);
+  }
+  button[aria-label="Set location"]:hover {
+    background-color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
+  }
+  button[aria-label="Set location"]::before { width: 24px; height: 24px; }
+
+  /* Label: small muted line over the bold place name */
+  button[aria-label="Set location"] > span {
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 17px;
+    color: var(--s8-ink);
+  }
+  button[aria-label="Set location"] > span::before {
+    content: "Showing prices for";
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 13px;
+    color: var(--s8-muted);
+  }
+
+  /* Chevron (Lucide chevron-down, 1.5px) */
+  button[aria-label="Set location"]::after {
+    content: "";
+    flex: none;
+    width: 16px;
+    height: 16px;
+    background-color: var(--s8-muted);
+    -webkit-mask: url("/save8-ui-fixes/ui-fixes/icons/chevron-down.svg") center / contain no-repeat;
+            mask: url("/save8-ui-fixes/ui-fixes/icons/chevron-down.svg") center / contain no-repeat;
+    transition: transform .2s ease, background-color .15s ease;
+  }
+  button[aria-label="Set location"]:hover::after {
+    transform: translateY(1px);
+    background-color: var(--s8-ink);
+  }
+}
+
+/* ---------- Mobile / tablet: icon-only circle (matches the white menu button) ---------- */
+@media (max-width: 1023.98px) {
+  button[aria-label="Set location"]::before {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* ---------- Task: Login button -> profile icon ----------
+   The orange "Login" pill becomes a round profile button with the Save8 stylised
+   icon/profile (colour, like the location pin). Same button, so it still opens login.
+   Matches its neighbours: desktop = the cream location pill's surface (38px circle);
+   phone = the white round menu/location buttons (36px).
+   Selector: the orange button inside the header navs (the orange search submit sits in a
+   <form>, not a nav) and its copy in the scrolled bar. */
+header nav button.bg-lp-orange-cta,
+.s8-bar-actions button.bg-lp-orange-cta {
+  position: relative;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px;
+  padding: 0 !important;
+  font-size: 0 !important;            /* hide the "Login" text (still read by screen readers) */
+  line-height: 0 !important;
+  color: transparent !important;
+  background: #F7F4ED !important;
+  border: 1px solid rgba(255, 255, 255, .6) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .14) !important;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease !important;
+}
+header nav button.bg-lp-orange-cta::before,
+.s8-bar-actions button.bg-lp-orange-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;                 /* avatar fills the whole round button */
+  /* Save8 stylised person avatar (illustrated icon system: light blue back circle,
+     blue-gradient head + shoulders, 14% white highlight) — reads as "profile" like other
+     profile buttons, and matches the colour location pin next to it. */
+  background: url("/save8-ui-fixes/ui-fixes/icons/icon-profile-person.svg") center / contain no-repeat;
+}
+header nav button.bg-lp-orange-cta:hover,
+.s8-bar-actions button.bg-lp-orange-cta:hover {
+  background: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18) !important;
+  opacity: 1 !important;
+}
+header nav button.bg-lp-orange-cta:active,
+.s8-bar-actions button.bg-lp-orange-cta:active { transform: scale(.96); }
+
+/* Phone / tablet: white circle like the menu and location buttons */
+@media (max-width: 1023.98px) {
+  header nav button.bg-lp-orange-cta {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    background: #FFFFFF !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,22 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- Save8 illustrated icon: profile (person avatar), full-bleed so it fills a round button.
+     Save8 icon system: light back layer #B9D0F8, main object in the Blue gradient
+     (#7AA5F4 -> #2E5CC8), 14% white highlight on the left part, no outlines, no shadows. -->
+<defs>
+  <linearGradient id="s8p_b" x1="0" y1="7" x2="0" y2="31" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#7AA5F4"/><stop offset="1" stop-color="#2E5CC8"/>
+  </linearGradient>
+  <clipPath id="s8p_c"><circle cx="15" cy="15" r="15"/></clipPath>
+</defs>
+<!-- back layer (fills the whole circle) -->
+<circle cx="15" cy="15" r="15" fill="#B9D0F8"/>
+<g clip-path="url(#s8p_c)">
+  <!-- shoulders -->
+  <path d="M3.6 31C3.6 24.2 8.7 19.7 15 19.7C21.3 19.7 26.4 24.2 26.4 31V32H3.6V31Z" fill="url(#s8p_b)"/>
+  <!-- head -->
+  <circle cx="15" cy="12.2" r="5.8" fill="url(#s8p_b)"/>
+  <!-- highlight on the left part -->
+  <path d="M15 6.4C11.8 6.4 9.2 9 9.2 12.2C9.2 15.4 11.8 18 15 18V6.4Z" fill="white" fill-opacity="0.14"/>
+  <path d="M15 19.7C8.7 19.7 3.6 24.2 3.6 31V32H15V19.7Z" fill="white" fill-opacity="0.14"/>
+</g>
+</svg>
