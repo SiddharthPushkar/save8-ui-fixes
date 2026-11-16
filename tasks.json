@@ -30,18 +30,6 @@
     ]
   },
   {
-    "id": "t3",
-    "title": "Smooth hero gradient, logo opens task list",
-    "page": "Home",
-    "path": "/",
-    "status": "done",
-    "created": "2026-11-14",
-    "changes": [
-      "Hero background fades from green to cream on an eased curve, so there's no hard line at the bottom",
-      "Same tones kept behind the hero text, so the white text stays readable"
-    ]
-  },
-  {
     "id": "t4",
     "title": "Balanced footer",
     "page": "Home",
