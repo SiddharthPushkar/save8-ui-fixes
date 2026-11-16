@@ -238,7 +238,9 @@
      Clicks are caught before the site's own link handling; the href is updated too so
      hovering / opening in a new tab shows the right page. */
   const TASKS_URL = location.pathname.startsWith("/save8-ui-fixes") ? "/save8-ui-fixes/tasks.html" : "/tasks";
-  const LOGO = 'a[aria-label="Save8 home"]';
+  // footer logos carry aria-label="Save8 home"; the header logo is an unlabelled <a href="/">
+  // around the Save8 logo image, so match that image too
+  const LOGO = 'a[aria-label="Save8 home"], a:has(img[src*="save8-logo"])';
   document.addEventListener("click", (e) => {
     const a = e.target && e.target.closest && e.target.closest(LOGO);
     if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
