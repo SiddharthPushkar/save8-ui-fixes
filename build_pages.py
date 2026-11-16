@@ -104,6 +104,14 @@ def build():
                 if t2 != t:
                     open(p, "w", encoding="utf8").write(t2)
                     n += 1
+    # cache-bust the UI-fix CSS/JS: GitHub Pages lets browsers keep files ~10 min, so tag each
+    # build's links with a version so changes show on the next page load
+    import time
+    stamp = time.strftime("%Y%m%d%H%M%S")
+    idx = os.path.join(OUT, "index.html")
+    t = open(idx, encoding="utf8").read()
+    t = re.sub(r'(/ui-fixes/[\w.-]+\.(?:css|js))(\?v=\d+)?"', lambda m: f'{m.group(1)}?v={stamp}"', t)
+    open(idx, "w", encoding="utf8").write(t)
     open(os.path.join(OUT, ".nojekyll"), "w").write("")
     # GitHub Pages serves 404.html for unknown paths; send people back to the home page
     open(os.path.join(OUT, "404.html"), "w", encoding="utf8").write(
